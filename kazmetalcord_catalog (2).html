@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Каталог — KazMetalCord</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F4F2EE;--bg2:#ECEAE5;--white:#FFF;
+  --navy:#0D1B2A;--steel:#1E3A5F;
+  --accent:#C8860A;--accent2:#A06A08;
+  --accent-lt:#FDF3E3;--accent-bd:#EDC06A;
+  --text:#18262F;--text2:#4A5668;--text3:#8A98A8;
+  --border:#DDD9D3;--border2:#C8C3BB;
+  --shadow:0 1px 3px rgba(0,0,0,0.06),0 4px 14px rgba(0,0,0,0.05);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.08),0 14px 32px rgba(0,0,0,0.07);
+  --font:'Manrope',sans-serif;
+  --sw:268px;--hh:62px;--sidebar-w:260px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.6;overflow-x:hidden}
+
+header{position:sticky;top:0;z-index:300;background:rgba(255,255,255,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:var(--hh)}
+.hi{display:flex;align-items:center;padding:0 28px;height:100%;gap:16px;max-width:1440px;margin:0 auto}
+.logo{display:flex;align-items:center;flex-shrink:0;cursor:pointer}
+.logo svg{height:16px;width:auto;display:block}
+.ct{display:flex;align-items:center;gap:8px;padding:0 16px;height:38px;background:transparent;border:1.5px solid var(--border2);border-radius:7px;color:var(--navy);font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;flex-shrink:0}
+.ct:hover{background:var(--bg);border-color:var(--navy)}
+.ct.open{background:var(--navy);border-color:var(--navy);color:#fff}
+.bur{display:flex;flex-direction:column;gap:3px}
+.bur span{display:block;width:13px;height:1.5px;background:var(--navy);border-radius:2px;transition:all .25s}
+.ct.open .bur span{background:#fff}
+.ct.open .bur span:nth-child(1){transform:translateY(4.5px) rotate(45deg)}
+.ct.open .bur span:nth-child(2){opacity:0}
+.ct.open .bur span:nth-child(3){transform:translateY(-4.5px) rotate(-45deg)}
+nav{display:flex;align-items:center;gap:2px}
+.nb{padding:6px 12px;border-radius:6px;font-size:13px;color:var(--text2);background:none;border:none;cursor:pointer;transition:all .18s;white-space:nowrap}
+.nb:hover{color:var(--navy);background:var(--bg)}
+.hr{display:flex;align-items:center;gap:14px;margin-left:auto;flex-shrink:0}
+.hph{font-size:13px;font-weight:700;color:var(--navy)}.hem{font-size:11px;color:var(--text3)}
+.btn-cta{padding:8px 20px;border-radius:7px;background:var(--accent);color:#fff;font-weight:700;font-size:13px;border:none;cursor:pointer;transition:all .18s;white-space:nowrap;font-family:var(--font)}
+.btn-cta:hover{background:var(--accent2);transform:translateY(-1px)}
+
+.ov{position:fixed;inset:0;background:rgba(0,0,0,0.28);z-index:399;opacity:0;pointer-events:none;transition:opacity .25s}
+.ov.show{opacity:1;pointer-events:all}
+.msidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sw);background:#fff;border-right:1px solid var(--border);z-index:400;overflow-y:auto;transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:4px 0 24px rgba(0,0,0,0.1);display:flex;flex-direction:column}
+.msidebar.open{transform:translateX(0)}
+.msb-top{height:var(--hh);min-height:var(--hh);display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+.msb-x{background:none;border:none;width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:18px;cursor:pointer;transition:all .15s}
+.msb-x:hover{background:var(--bg);color:var(--navy)}
+.msb-lbl{padding:10px 16px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0}
+.msi{border-bottom:1px solid var(--border)}
+.msr{display:flex;align-items:center;gap:9px;padding:10px 16px;cursor:pointer;transition:background .15s}
+.msr:hover{background:var(--bg)}
+.msr.active{background:var(--accent-lt);border-left:3px solid var(--accent)}
+.msico{width:30px;height:30px;border-radius:6px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.mslbl{flex:1;font-size:13px;font-weight:500;color:var(--text)}
+.msarr{font-size:10px;color:var(--text3);transition:transform .2s;flex-shrink:0}
+.msr.open .msarr{transform:rotate(90deg);color:var(--accent)}
+.mssubs{display:none;background:var(--bg)}
+.mssubs.open{display:block}
+.mssub{display:flex;align-items:center;gap:6px;padding:7px 16px 7px 54px;font-size:12px;color:var(--text2);cursor:pointer;transition:all .14s;border-bottom:1px solid var(--border)}
+.mssub:last-child{border-bottom:none}
+.mssub:hover{color:var(--navy);background:var(--bg2)}
+.mssub::before{content:'';width:3px;height:3px;border-radius:50%;background:var(--border2);flex-shrink:0}
+
+.breadcrumb-wrap{background:var(--white);border-bottom:1px solid var(--border)}
+.breadcrumb{max-width:1440px;margin:0 auto;padding:12px 28px;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3)}
+.bc-item{cursor:pointer;transition:color .15s}
+.bc-item:hover{color:var(--accent)}
+.bc-item.active{color:var(--text);font-weight:600;cursor:default}
+.bc-sep{opacity:.4;font-size:10px}
+
+.page{max-width:1440px;margin:0 auto;padding:28px 28px 60px;display:grid;grid-template-columns:var(--sidebar-w) 1fr;gap:24px;align-items:start}
+
+.cat-sidebar{position:sticky;top:calc(var(--hh) + 20px);background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.csb-head{padding:16px 18px;border-bottom:1px solid var(--border);background:var(--bg)}
+.csb-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3)}
+.csb-cat{border-bottom:1px solid var(--border)}
+.csb-cat:last-child{border-bottom:none}
+.csb-main{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;transition:all .15s;position:relative}
+.csb-main:hover{background:var(--bg)}
+.csb-main.active{background:var(--accent-lt)}
+.csb-main.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);border-radius:0 2px 2px 0}
+.csb-ico{font-size:15px;flex-shrink:0;width:22px;text-align:center}
+.csb-name{flex:1;font-size:13px;font-weight:500;color:var(--text)}
+.csb-main.active .csb-name{color:var(--navy);font-weight:600}
+.csb-cnt{font-size:11px;color:var(--text3);background:var(--bg2);border-radius:10px;padding:1px 7px;flex-shrink:0}
+.csb-arr{font-size:9px;color:var(--text3);transition:transform .18s;flex-shrink:0;margin-left:2px}
+.csb-main.open .csb-arr{transform:rotate(90deg)}
+.csb-subs{display:none;background:var(--bg)}
+.csb-subs.open{display:block}
+.csb-sub{display:flex;align-items:center;gap:6px;padding:7px 16px 7px 48px;font-size:12px;color:var(--text2);cursor:pointer;transition:all .13s;border-top:1px solid var(--border)}
+.csb-sub:hover{color:var(--navy);background:var(--bg2)}
+.csb-sub.active{color:var(--accent);font-weight:600}
+.csb-sub::before{content:'';width:3px;height:3px;border-radius:50%;background:var(--border2);flex-shrink:0}
+.csb-sub.active::before{background:var(--accent)}
+
+
+
+
+
+
+.fb-section:last-child{border-bottom:none}
+
+
+.fb-check:last-child{margin-bottom:0}
+.fb-check input{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+.fb-check span{font-size:12px;color:var(--text2)}
+.fb-check span em{color:var(--text3);font-style:normal}
+
+
+.price-inp:focus{border-color:var(--accent)}
+
+
+
+.cat-header{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:24px 28px 20px;margin-bottom:20px;box-shadow:var(--shadow)}
+.cat-header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:16px}
+.cat-title{font-size:26px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:-0.3px;line-height:1.1}
+.cat-desc{font-size:13px;color:var(--text2);margin-top:6px;line-height:1.6;max-width:600px}
+.cat-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--accent);background:var(--accent-lt);border:1px solid var(--accent-bd);border-radius:20px;padding:4px 12px;white-space:nowrap;flex-shrink:0}
+.subcats{display:flex;gap:8px;flex-wrap:wrap}
+.sc{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg);border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.sc:hover,.sc.active{background:var(--accent-lt);border-color:var(--accent-bd);color:var(--accent);font-weight:600}
+.sc-cnt{font-size:10px;color:var(--text3)}
+.sc.active .sc-cnt{color:var(--accent2)}
+
+.toolbar{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.toolbar-left{display:flex;align-items:center;gap:8px;flex:1}
+.t-found{font-size:13px;color:var(--text3)}
+.t-found b{color:var(--text);font-weight:600}
+.toolbar-right{display:flex;align-items:center;gap:8px}
+.t-sort{padding:7px 12px;border:1px solid var(--border);border-radius:7px;background:var(--white);font-size:12px;font-family:var(--font);color:var(--text);cursor:pointer;outline:none;transition:border-color .15s}
+.t-sort:focus{border-color:var(--accent)}
+.t-view{width:32px;height:32px;border:1px solid var(--border);border-radius:6px;background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;font-size:14px;color:var(--text3)}
+.t-view:hover,.t-view.active{background:var(--accent-lt);border-color:var(--accent-bd);color:var(--accent)}
+
+/* ─── КАРТОЧКИ ТОВАРОВ ─── */
+.products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.prod{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:all .22s;box-shadow:var(--shadow);cursor:pointer;display:flex;flex-direction:column}
+.prod:hover{border-color:var(--accent-bd);box-shadow:var(--shadow-md);transform:translateY(-3px)}
+
+/* Зона иллюстрации */
+.prod-img{height:160px;background:var(--bg2);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.prod-img svg{width:100%;height:100%}
+.prod-badge{position:absolute;top:10px;left:10px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;z-index:2}
+.prod-badge.new{background:var(--navy);color:#fff}
+.prod-badge.sale{background:#e53935;color:#fff}
+.prod-badge.hit{background:var(--accent);color:#fff}
+.prod-fav{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:6px;background:rgba(255,255,255,0.85);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:all .15s;z-index:2}
+.prod-fav:hover{background:#fff;transform:scale(1.1)}
+
+.prod-body{padding:16px;flex:1;display:flex;flex-direction:column}
+.prod-art{font-size:10px;color:var(--text3);margin-bottom:4px;font-weight:500}
+.prod-name{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px;line-height:1.35}
+.prod-specs{display:flex;flex-direction:column;gap:3px;margin-bottom:12px;flex:1}
+.prod-spec{display:flex;justify-content:space-between;font-size:11px;padding:3px 0;border-bottom:1px solid var(--bg2)}
+.prod-spec:last-child{border-bottom:none}
+.prod-spec-k{color:var(--text3)}
+.prod-spec-v{color:var(--text);font-weight:600}
+.prod-footer{border-top:1px solid var(--border);padding-top:12px;display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+.prod-price-wrap{}
+.prod-price{font-size:17px;font-weight:800;color:var(--navy);display:block;line-height:1}
+.prod-price-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.prod-price-old{font-size:11px;color:var(--text3);text-decoration:line-through}
+.btn-req{padding:8px 14px;border-radius:7px;background:transparent;color:var(--navy);font-size:12px;font-weight:700;border:1.5px solid var(--border2);cursor:pointer;transition:all .18s;white-space:nowrap;font-family:var(--font)}
+.btn-req:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-lt)}
+
+/* Наличие */
+.prod-stock{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;margin-bottom:8px}
+.prod-stock::before{content:'';width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.prod-stock.yes{color:#1E7E34}
+.prod-stock.yes::before{background:#28a745}
+.prod-stock.low{color:#856404}
+.prod-stock.low::before{background:#ffc107}
+.prod-stock.order{color:var(--text3)}
+.prod-stock.order::before{background:var(--border2)}
+
+.pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:28px}
+.pg{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .15s;font-family:var(--font)}
+.pg:hover{border-color:var(--accent-bd);color:var(--accent);background:var(--accent-lt)}
+.pg.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.pg.dots{border:none;background:none;cursor:default;color:var(--text3)}
+.pg.arr{font-size:16px;color:var(--text3)}
+.pg.arr:hover{color:var(--accent)}
+
+.seo-block{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:28px;margin-top:20px;box-shadow:var(--shadow)}
+.seo-block h2{font-size:18px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:-0.2px;margin-bottom:12px}
+.seo-block p{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:10px}
+.seo-block p:last-child{margin-bottom:0}
+
+.float{position:fixed;bottom:26px;right:26px;z-index:500;background:var(--accent);color:#fff;font-weight:700;font-size:12px;padding:12px 22px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(200,134,10,0.4);display:flex;align-items:center;gap:6px;transition:all .2s;font-family:var(--font)}
+.float:hover{background:var(--accent2);transform:translateY(-3px)}
+</style>
+</head>
+<body>
+
+<button class="float">✉ Оставить заявку</button>
+<div class="ov" id="ov" onclick="closeSb()"></div>
+
+<aside class="msidebar" id="msidebar">
+  <div class="msb-top">
+    <div class="msb-logo">
+      <svg width="185" height="15" viewBox="0 0 185 15" fill="none"><path d="M0.873535 0.622559H4.37744V6.60205L6.75781 6.52588L10.833 0.622559H15.1177L10.1284 7.8208L15.1177 15H10.833L7.31006 9.91553H4.37744V15H0.873535V0.622559ZM15.1558 15L20.6973 0.622559H24.4487L20.9829 9.64893H24.1821L23.5537 8.03027L25.4199 3.15527L29.9902 15H26.2197L25.439 12.9814H19.688L18.9072 15H15.1558ZM30.8091 0.622559H45.0151V3.93604L35.9697 11.6865H45.0151V15H30.8091V11.6865L39.8545 3.93604H30.8091V0.622559ZM60.9541 15V5.72607L57.7358 10.3345H53.4702L50.2329 5.70703V15H46.729V0.622559H50.9946L55.603 7.24951L60.2114 0.622559H64.4771L64.458 0.641602V15H60.9541ZM79.3877 14.981H69.4092C68.3174 14.981 67.4224 14.5557 66.7241 13.7051C66.1782 13.0449 65.9053 12.3022 65.9053 11.4771V4.14551C65.9053 3.06641 66.3242 2.17139 67.1621 1.46045C67.8223 0.901855 68.5713 0.622559 69.4092 0.622559H79.1973V3.93604H69.4092V6.14502H79.0068V9.4585H69.4092V11.6675H79.3877V14.981ZM86.2051 4.16455H80.7969V0.641602H86.2051V0.622559H89.728V0.641602H95.1553V4.16455H89.728V15H86.2051V4.16455ZM92.9844 15L98.5259 0.622559H102.277L98.8115 9.64893H102.011L101.382 8.03027L103.249 3.15527L107.819 15H104.048L103.268 12.9814H97.5166L96.7358 15H92.9844ZM108.619 0.622559H112.123V11.6865H121.911V15H112.123C111.031 15 110.136 14.5747 109.438 13.7241C108.892 13.064 108.619 12.3213 108.619 11.4961V0.622559ZM133.832 9.70605H137.335V11.4771C137.335 12.5688 136.91 13.4639 136.06 14.1621C135.399 14.708 134.657 14.981 133.832 14.981H126.576C125.484 14.981 124.589 14.5557 123.891 13.7051C123.345 13.0449 123.072 12.3022 123.072 11.4771V4.14551C123.072 3.06641 123.491 2.17139 124.329 1.46045C124.989 0.901855 125.738 0.622559 126.576 0.622559H133.832C134.911 0.622559 135.806 1.04785 136.517 1.89844C137.062 2.55859 137.335 3.30762 137.335 4.14551V5.89746H133.832V3.93604H126.576V11.6675H133.832V9.70605ZM142.058 3.93604V11.6675H149.313V3.93604H142.058ZM138.554 11.4771V4.14551C138.554 3.06641 138.973 2.17139 139.811 1.46045C140.471 0.901855 141.22 0.622559 142.058 0.622559H149.313C150.393 0.622559 151.288 1.04785 151.999 1.89844C152.544 2.55859 152.817 3.30762 152.817 4.14551V11.4771C152.817 12.5688 152.392 13.4639 151.542 14.1621C150.881 14.708 150.139 14.981 149.313 14.981H142.058C140.966 14.981 140.071 14.5557 139.373 13.7051C138.827 13.0449 138.554 12.3022 138.554 11.4771ZM154.455 3.93604V0.622559H164.967C166.046 0.622559 166.941 1.04785 167.652 1.89844C168.198 2.55859 168.471 3.30762 168.471 4.14551V6.39258C168.471 7.47168 168.052 8.3667 167.214 9.07764C166.554 9.63623 165.805 9.91553 164.967 9.91553L168.49 15H164.224L160.701 9.91553H157.769V15H154.265V6.60205H164.967V3.93604H154.455ZM170.013 3.93604V0.622559H180.525C181.604 0.622559 182.499 1.04785 183.21 1.89844C183.756 2.55859 184.029 3.30762 184.029 4.14551V11.4771C184.029 12.5688 183.604 13.4639 182.753 14.1621C182.093 14.708 181.35 14.981 180.525 14.981H173.327V15H169.823V5.89746H173.327V11.6675H180.525V3.93604H170.013Z" fill="#0D1B2A"/></svg>
+    </div>
+    <button class="msb-x" onclick="closeSb()">✕</button>
+  </div>
+  <div class="msb-lbl">Продукция</div>
+  <div id="msb-cats"></div>
+</aside>
+
+<header>
+  <div class="hi">
+    <div class="logo">
+      <svg width="185" height="15" viewBox="0 0 185 15" fill="none"><path d="M0.873535 0.622559H4.37744V6.60205L6.75781 6.52588L10.833 0.622559H15.1177L10.1284 7.8208L15.1177 15H10.833L7.31006 9.91553H4.37744V15H0.873535V0.622559ZM15.1558 15L20.6973 0.622559H24.4487L20.9829 9.64893H24.1821L23.5537 8.03027L25.4199 3.15527L29.9902 15H26.2197L25.439 12.9814H19.688L18.9072 15H15.1558ZM30.8091 0.622559H45.0151V3.93604L35.9697 11.6865H45.0151V15H30.8091V11.6865L39.8545 3.93604H30.8091V0.622559ZM60.9541 15V5.72607L57.7358 10.3345H53.4702L50.2329 5.70703V15H46.729V0.622559H50.9946L55.603 7.24951L60.2114 0.622559H64.4771L64.458 0.641602V15H60.9541ZM79.3877 14.981H69.4092C68.3174 14.981 67.4224 14.5557 66.7241 13.7051C66.1782 13.0449 65.9053 12.3022 65.9053 11.4771V4.14551C65.9053 3.06641 66.3242 2.17139 67.1621 1.46045C67.8223 0.901855 68.5713 0.622559 69.4092 0.622559H79.1973V3.93604H69.4092V6.14502H79.0068V9.4585H69.4092V11.6675H79.3877V14.981ZM86.2051 4.16455H80.7969V0.641602H86.2051V0.622559H89.728V0.641602H95.1553V4.16455H89.728V15H86.2051V4.16455ZM92.9844 15L98.5259 0.622559H102.277L98.8115 9.64893H102.011L101.382 8.03027L103.249 3.15527L107.819 15H104.048L103.268 12.9814H97.5166L96.7358 15H92.9844ZM108.619 0.622559H112.123V11.6865H121.911V15H112.123C111.031 15 110.136 14.5747 109.438 13.7241C108.892 13.064 108.619 12.3213 108.619 11.4961V0.622559ZM133.832 9.70605H137.335V11.4771C137.335 12.5688 136.91 13.4639 136.06 14.1621C135.399 14.708 134.657 14.981 133.832 14.981H126.576C125.484 14.981 124.589 14.5557 123.891 13.7051C123.345 13.0449 123.072 12.3022 123.072 11.4771V4.14551C123.072 3.06641 123.491 2.17139 124.329 1.46045C124.989 0.901855 125.738 0.622559 126.576 0.622559H133.832C134.911 0.622559 135.806 1.04785 136.517 1.89844C137.062 2.55859 137.335 3.30762 137.335 4.14551V5.89746H133.832V3.93604H126.576V11.6675H133.832V9.70605ZM142.058 3.93604V11.6675H149.313V3.93604H142.058ZM138.554 11.4771V4.14551C138.554 3.06641 138.973 2.17139 139.811 1.46045C140.471 0.901855 141.22 0.622559 142.058 0.622559H149.313C150.393 0.622559 151.288 1.04785 151.999 1.89844C152.544 2.55859 152.817 3.30762 152.817 4.14551V11.4771C152.817 12.5688 152.392 13.4639 151.542 14.1621C150.881 14.708 150.139 14.981 149.313 14.981H142.058C140.966 14.981 140.071 14.5557 139.373 13.7051C138.827 13.0449 138.554 12.3022 138.554 11.4771ZM154.455 3.93604V0.622559H164.967C166.046 0.622559 166.941 1.04785 167.652 1.89844C168.198 2.55859 168.471 3.30762 168.471 4.14551V6.39258C168.471 7.47168 168.052 8.3667 167.214 9.07764C166.554 9.63623 165.805 9.91553 164.967 9.91553L168.49 15H164.224L160.701 9.91553H157.769V15H154.265V6.60205H164.967V3.93604H154.455ZM170.013 3.93604V0.622559H180.525C181.604 0.622559 182.499 1.04785 183.21 1.89844C183.756 2.55859 184.029 3.30762 184.029 4.14551V11.4771C184.029 12.5688 183.604 13.4639 182.753 14.1621C182.093 14.708 181.35 14.981 180.525 14.981H173.327V15H169.823V5.89746H173.327V11.6675H180.525V3.93604H170.013Z" fill="#0D1B2A"/></svg>
+    </div>
+    <button class="ct" id="ct" onclick="toggleSb()">
+      <span class="bur"><span></span><span></span><span></span></span>
+      <span id="ct-lbl">Каталог</span>
+    </button>
+    <nav>
+      <button class="nb">О компании</button>
+      <button class="nb">Доставка</button>
+      <button class="nb">Блог</button>
+      <button class="nb">Контакты</button>
+    </nav>
+    <div class="hr">
+      <div><div class="hph">+7 707 704 97 22</div><div class="hem">zakaz@kaz-metall.kz</div></div>
+      <button class="btn-cta">Оставить запрос</button>
+    </div>
+  </div>
+</header>
+
+<div class="breadcrumb-wrap">
+  <div class="breadcrumb">
+    <span class="bc-item">Главная</span><span class="bc-sep">›</span>
+    <span class="bc-item">Каталог</span><span class="bc-sep">›</span>
+    <span class="bc-item active">Трубный прокат</span>
+  </div>
+</div>
+
+<div class="page">
+  <aside>
+    <div class="cat-sidebar" id="cat-sidebar"></div>
+  </aside>
+  </aside>
+
+  <main>
+    <div class="cat-header">
+      <div class="cat-header-top">
+        <div>
+          <div class="cat-title">Трубный прокат</div>
+          <div class="cat-desc">Стальные трубы бесшовные и электросварные по ГОСТ и СТ-KZ. Поставки на объекты Казахстана — от 48 часов. Сертификаты при каждой отгрузке.</div>
+        </div>
+        <div class="cat-badge">312 позиций</div>
+      </div>
+      <div class="subcats">
+        <div class="sc active">Все <span class="sc-cnt">(312)</span></div>
+        <div class="sc">Бесшовная <span class="sc-cnt">(84)</span></div>
+        <div class="sc">Электросварная <span class="sc-cnt">(128)</span></div>
+        <div class="sc">Профильная <span class="sc-cnt">(67)</span></div>
+        <div class="sc">Нержавеющая <span class="sc-cnt">(33)</span></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-left"><span class="t-found">Найдено: <b>248</b> позиций</span></div>
+      <div class="toolbar-right">
+        <select class="t-sort">
+          <option>По популярности</option>
+          <option>Цена: по возрастанию</option>
+          <option>Цена: по убыванию</option>
+          <option>По артикулу</option>
+        </select>
+        <button class="t-view active" title="Сетка">▦</button>
+        <button class="t-view" title="Список">☰</button>
+      </div>
+    </div>
+
+    <div class="products-grid" id="prod-grid"></div>
+
+    <div class="pagination">
+      <button class="pg arr">‹</button>
+      <button class="pg active">1</button>
+      <button class="pg">2</button>
+      <button class="pg">3</button>
+      <button class="pg dots">…</button>
+      <button class="pg">21</button>
+      <button class="pg arr">›</button>
+    </div>
+
+    <div class="seo-block">
+      <h2>Трубный прокат в Алматы</h2>
+      <p>KazMetalCord поставляет стальные трубы бесшовные (ГОСТ 8731, 8733) и электросварные (ГОСТ 10704, 10705) для промышленных, строительных и коммунальных объектов по всему Казахстану. В наличии трубы диаметром от 15 до 530 мм, толщиной стенки 1,5–50 мм.</p>
+      <p>Работаем только с юридическими лицами: ТОО, АО, государственные учреждения. Оформляем тендерные поставки, выдаём полный пакет закрывающих документов — счёт, договор, УПД, сертификаты качества.</p>
+    </div>
+  </main>
+</div>
+
+<script>
+// SVG-иллюстрации товаров — схематичные, технические
+const svgs = {
+  // Круглая труба в разрезе — вид спереди
+  pipe_round: (d,wall,col) => `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="160" fill="#ECEAE5"/>
+    <!-- Тень -->
+    <ellipse cx="100" cy="148" rx="52" ry="5" fill="rgba(0,0,0,0.07)"/>
+    <!-- Труба — боковые грани (перспектива) -->
+    <path d="M44 48 Q44 110 44 112 Q55 130 100 130 Q145 130 156 112 L156 48 Q145 66 100 66 Q55 66 44 48Z" fill="${col}22" stroke="${col}" stroke-width="1.5"/>
+    <!-- Правая торцевая заглушка (эллипс) -->
+    <ellipse cx="100" cy="48" rx="56" ry="18" fill="${col}18" stroke="${col}" stroke-width="1.5"/>
+    <!-- Внутреннее отверстие на торце -->
+    <ellipse cx="100" cy="48" rx="${56-wall*3}" ry="${18-wall}" fill="#ECEAE5" stroke="${col}" stroke-width="1"/>
+    <!-- Разметка диаметра -->
+    <line x1="44" y1="38" x2="156" y2="38" stroke="${col}60" stroke-width="0.8" stroke-dasharray="3 2"/>
+    <text x="100" y="35" fill="${col}" font-family="Manrope,sans-serif" font-size="9" text-anchor="middle" font-weight="600">∅${d} мм</text>
+    <!-- Разметка стенки -->
+    <line x1="44" y1="56" x2="${44+wall*3+2}" y2="56" stroke="${col}80" stroke-width="0.8"/>
+    <text x="${44+wall*3+14}" y="59" fill="${col}" font-family="Manrope,sans-serif" font-size="8" text-anchor="start">s=${wall}</text>
+  </svg>`,
+
+  // Профильная (квадратная) труба
+  pipe_prof: (a,wall,col) => `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="160" fill="#ECEAE5"/>
+    <ellipse cx="100" cy="148" rx="52" ry="5" fill="rgba(0,0,0,0.07)"/>
+    <!-- Передняя грань -->
+    <rect x="42" y="50" width="90" height="82" fill="${col}18" stroke="${col}" stroke-width="1.5" rx="2"/>
+    <!-- Верхняя грань (перспектива) -->
+    <path d="M42 50 L66 28 L156 28 L132 50Z" fill="${col}28" stroke="${col}" stroke-width="1.5"/>
+    <!-- Правая грань -->
+    <path d="M132 50 L156 28 L156 110 L132 132Z" fill="${col}20" stroke="${col}" stroke-width="1.5"/>
+    <!-- Отверстие спереди -->
+    <rect x="${42+wall*2}" y="${50+wall*2}" width="${90-wall*4}" height="${82-wall*4}" fill="#ECEAE5" stroke="${col}" stroke-width="1" rx="1"/>
+    <!-- Размеры -->
+    <line x1="30" y1="50" x2="30" y2="132" stroke="${col}60" stroke-width="0.8" stroke-dasharray="3 2"/>
+    <text x="28" y="97" fill="${col}" font-family="Manrope,sans-serif" font-size="8" text-anchor="middle" font-weight="600" transform="rotate(-90,28,97)">${a}×${a}</text>
+  </svg>`,
+
+  // Арматура — рифлёная
+  rebar: (d,col) => `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="160" fill="#ECEAE5"/>
+    <ellipse cx="100" cy="148" rx="58" ry="5" fill="rgba(0,0,0,0.07)"/>
+    <!-- Тело стержня -->
+    <rect x="20" y="68" width="160" height="${d*0.5}" rx="${d*0.12}" fill="${col}28" stroke="${col}" stroke-width="1.5"/>
+    <!-- Рифли -->
+    ${Array.from({length:10},(_,i)=>`<line x1="${32+i*14}" y1="64" x2="${28+i*14}" y2="${72+d*0.5}" stroke="${col}" stroke-width="2" stroke-linecap="round" opacity="0.7"/>`).join('')}
+    <!-- Торец -->
+    <ellipse cx="20" cy="${68+d*0.25}" rx="5" ry="${d*0.25}" fill="${col}40" stroke="${col}" stroke-width="1.2"/>
+    <!-- Размер -->
+    <line x1="20" y1="60" x2="180" y2="60" stroke="${col}50" stroke-width="0.8" stroke-dasharray="3 2"/>
+    <text x="100" y="57" fill="${col}" font-family="Manrope,sans-serif" font-size="9" text-anchor="middle" font-weight="600">∅${d} мм</text>
+  </svg>`,
+
+  // Уголок
+  angle: (a,col) => `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="160" fill="#ECEAE5"/>
+    <ellipse cx="100" cy="148" rx="58" ry="5" fill="rgba(0,0,0,0.07)"/>
+    <!-- Горизонтальная полка -->
+    <path d="M30 110 L170 110 L170 124 L30 124Z" fill="${col}22" stroke="${col}" stroke-width="1.5"/>
+    <!-- Вертикальная полка -->
+    <path d="M30 30 L44 30 L44 124 L30 124Z" fill="${col}30" stroke="${col}" stroke-width="1.5"/>
+    <!-- Торец уголка (перспектива) -->
+    <path d="M170 110 L180 102 L180 116 L170 124Z" fill="${col}20" stroke="${col}" stroke-width="1.2"/>
+    <path d="M44 30 L54 22 L54 36 L44 30Z" fill="${col}20" stroke="${col}" stroke-width="1.2"/>
+    <!-- Размеры -->
+    <text x="100" y="106" fill="${col}" font-family="Manrope,sans-serif" font-size="9" text-anchor="middle" font-weight="600">${a} мм</text>
+  </svg>`,
+
+  // Швеллер
+  channel: (h,col) => `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="160" fill="#ECEAE5"/>
+    <ellipse cx="100" cy="148" rx="58" ry="5" fill="rgba(0,0,0,0.07)"/>
+    <!-- Стенка -->
+    <rect x="56" y="30" width="14" height="${h*0.7}" fill="${col}28" stroke="${col}" stroke-width="1.5"/>
+    <!-- Верхняя полка -->
+    <rect x="56" y="30" width="58" height="14" fill="${col}22" stroke="${col}" stroke-width="1.5"/>
+    <!-- Нижняя полка -->
+    <rect x="56" y="${30+h*0.7-14}" width="58" height="14" fill="${col}22" stroke="${col}" stroke-width="1.5"/>
+    <!-- Перспектива -->
+    <path d="M114 30 L130 18 L130 32 L114 44Z" fill="${col}18" stroke="${col}" stroke-width="1"/>
+    <path d="M114 ${30+h*0.7-14} L130 ${30+h*0.7-26} L130 ${30+h*0.7-12} L114 ${30+h*0.7}Z" fill="${col}18" stroke="${col}" stroke-width="1"/>
+    <line x1="130" y1="32" x2="130" y2="${30+h*0.7-12}" stroke="${col}" stroke-width="1.5"/>
+    <!-- Размер -->
+    <line x1="40" y1="30" x2="40" y2="${30+h*0.7}" stroke="${col}60" stroke-width="0.8" stroke-dasharray="3 2"/>
+    <text x="38" y="${30+h*0.35}" fill="${col}" font-family="Manrope,sans-serif" font-size="8" text-anchor="middle" font-weight="600" transform="rotate(-90,38,${30+h*0.35})">№${h}</text>
+  </svg>`,
+
+  // Лист стальной
+  sheet: (t,col) => `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="160" fill="#ECEAE5"/>
+    <ellipse cx="100" cy="148" rx="68" ry="5" fill="rgba(0,0,0,0.07)"/>
+    <!-- Лист — перспектива -->
+    <path d="M24 90 L60 62 L176 62 L176 ${62+t*3} L140 ${90+t*3} L24 ${90+t*3}Z" fill="${col}14" stroke="${col}" stroke-width="1.5"/>
+    <path d="M176 62 L176 ${62+t*3} L140 ${90+t*3} L140 90Z" fill="${col}28" stroke="${col}" stroke-width="1.5"/>
+    <path d="M24 90 L60 62 L176 62 L140 90Z" fill="${col}22" stroke="${col}" stroke-width="1.5"/>
+    <!-- Сетка на поверхности -->
+    ${[1,2,3].map(i=>`<line x1="${24+i*29}" y1="90" x2="${60+i*29}" y2="62" stroke="${col}30" stroke-width="0.6"/>`).join('')}
+    ${[1,2].map(i=>`<line x1="${24+i*38}" y1="${90-i*9}" x2="${176-i*12}" y2="${62-i*9}" stroke="${col}20" stroke-width="0.6"/>`).join('')}
+    <!-- Толщина -->
+    <text x="160" y="${75+t*3}" fill="${col}" font-family="Manrope,sans-serif" font-size="8" font-weight="600">δ=${t}мм</text>
+  </svg>`,
+
+  // Кабель в разрезе
+  cable: (d,col) => `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="160" fill="#ECEAE5"/>
+    <ellipse cx="100" cy="148" rx="52" ry="5" fill="rgba(0,0,0,0.07)"/>
+    <!-- Изоляция -->
+    <ellipse cx="100" cy="80" rx="${d*2.2}" ry="${d*2.2}" fill="${col}20" stroke="${col}" stroke-width="2"/>
+    <!-- Броня -->
+    <ellipse cx="100" cy="80" rx="${d*1.8}" ry="${d*1.8}" fill="#9E9E9E20" stroke="#9E9E9E" stroke-width="1.5"/>
+    <!-- Внутренние жилы (3 штуки) -->
+    <circle cx="${100-d*0.8}" cy="${80-d*0.3}" r="${d*0.5}" fill="#E8593C40" stroke="#E8593C" stroke-width="1.2"/>
+    <circle cx="${100+d*0.8}" cy="${80-d*0.3}" r="${d*0.5}" fill="#4CAF5040" stroke="#4CAF50" stroke-width="1.2"/>
+    <circle cx="100" cy="${80+d*0.8}" r="${d*0.5}" fill="#2196F340" stroke="#2196F3" stroke-width="1.2"/>
+    <!-- Нулевая жила -->
+    <circle cx="100" cy="80" r="${d*0.22}" fill="#61616140" stroke="#616161" stroke-width="1"/>
+    <!-- Обозначение -->
+    <text x="100" y="${80+d*2.2+14}" fill="${col}" font-family="Manrope,sans-serif" font-size="9" text-anchor="middle" font-weight="600">∅${d} мм</text>
+  </svg>`,
+
+  // Нержавеющая труба (полированная)
+  pipe_ss: (d,col) => `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="160" fill="#ECEAE5"/>
+    <ellipse cx="100" cy="148" rx="52" ry="5" fill="rgba(0,0,0,0.07)"/>
+    <path d="M44 48 Q44 110 44 112 Q55 130 100 130 Q145 130 156 112 L156 48 Q145 66 100 66 Q55 66 44 48Z" fill="url(#ssGrad)" stroke="${col}" stroke-width="1.5"/>
+    <defs><linearGradient id="ssGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="${col}" stop-opacity="0.35"/><stop offset="50%" stop-color="${col}" stop-opacity="0.12"/><stop offset="100%" stop-color="${col}" stop-opacity="0.28"/></linearGradient></defs>
+    <ellipse cx="100" cy="48" rx="56" ry="18" fill="${col}20" stroke="${col}" stroke-width="1.5"/>
+    <ellipse cx="100" cy="48" rx="${56-6}" ry="${18-3}" fill="#ECEAE5" stroke="${col}" stroke-width="1"/>
+    <!-- Блик полировки -->
+    <path d="M72 55 Q80 45 90 48" stroke="white" stroke-width="1.5" opacity="0.6" fill="none"/>
+    <text x="100" y="35" fill="${col}" font-family="Manrope,sans-serif" font-size="9" text-anchor="middle" font-weight="600">∅${d} нерж.</text>
+  </svg>`,
+};
+
+// Палитра цветов для разных типов
+const colors = {
+  pipe_bs: '#1E3A5F',   // бесшовная — стальной синий
+  pipe_ew: '#2E5F3A',   // электросварная — тёмно-зелёный
+  pipe_prof: '#5F3A1E', // профильная — бронза
+  pipe_ss: '#4A4A5F',   // нержавеющая — серо-синий
+  rebar: '#5F2020',     // арматура — тёмно-красный
+  angle: '#1E4A5F',     // уголок
+  channel: '#3A1E5F',   // швеллер
+  sheet: '#1E5F4A',     // лист
+  cable: '#5F4A1E',     // кабель
+};
+
+// Данные товаров — 12 позиций
+const products = [
+  {art:'ТБ-5705',name:'Труба бесшовная 57×5 мм ГОСТ 8731',svg:svgs.pipe_round(57,5,colors.pipe_bs),badge:'hit',stock:'yes',stockTxt:'На складе: 840 м',specs:[['Стандарт','ГОСТ 8731'],['Сталь','09Г2С'],['Длина','6–12 м'],['Вес п.м.','6,28 кг'],['Min. партия','12 м']],price:'1 840',unit:'м',old:null},
+  {art:'ТЭ-1084',name:'Труба эл/сварная 108×4 мм ГОСТ 10704',svg:svgs.pipe_round(108,4,colors.pipe_ew),badge:null,stock:'yes',stockTxt:'На складе: 1 440 м',specs:[['Стандарт','ГОСТ 10704'],['Сталь','Ст3сп'],['Длина','12 м'],['Вес п.м.','10,26 кг'],['Min. партия','12 м']],price:'2 310',unit:'м',old:'2 650'},
+  {art:'ТП-4040',name:'Профильная труба 40×40×3 мм',svg:svgs.pipe_prof(40,3,colors.pipe_prof),badge:null,stock:'yes',stockTxt:'На складе: 2 160 м',specs:[['Стандарт','ГОСТ 30245'],['Сталь','Ст3'],['Длина','6 м'],['Вес п.м.','3,45 кг'],['Min. партия','6 м']],price:'1 290',unit:'м',old:null},
+  {art:'ТН-5730',name:'Труба нержавеющая 57×3 мм AISI 304',svg:svgs.pipe_ss(57,colors.pipe_ss),badge:'new',stock:'low',stockTxt:'Осталось: 96 м',specs:[['Стандарт','ГОСТ 9940'],['Сталь','12Х18Н10Т'],['Длина','6 м'],['Вес п.м.','4,0 кг'],['Min. партия','6 м']],price:'18 400',unit:'м',old:null},
+  {art:'ТБ-15910',name:'Труба бесшовная 159×10 мм',svg:svgs.pipe_round(159,10,colors.pipe_bs),badge:null,stock:'yes',stockTxt:'На складе: 384 м',specs:[['Стандарт','ГОСТ 8731'],['Сталь','20'],['Длина','8–12 м'],['Вес п.м.','37,9 кг'],['Min. партия','8 м']],price:'7 280',unit:'м',old:null},
+  {art:'ТЭ-0325',name:'Труба эл/сварная 32×2,5 мм',svg:svgs.pipe_round(32,2.5,colors.pipe_ew),badge:'sale',stock:'yes',stockTxt:'На складе: 3 600 м',specs:[['Стандарт','ГОСТ 10704'],['Сталь','Ст3сп'],['Длина','12 м'],['Вес п.м.','1,77 кг'],['Min. партия','12 м']],price:'680',unit:'м',old:'820'},
+  {art:'ТП-8060',name:'Профильная труба 80×60×4 мм',svg:svgs.pipe_prof(80,4,colors.pipe_prof),badge:null,stock:'yes',stockTxt:'На складе: 720 м',specs:[['Стандарт','ГОСТ 30245'],['Сталь','Ст3'],['Длина','6 м'],['Вес п.м.','7,24 кг'],['Min. партия','6 м']],price:'2 180',unit:'м',old:null},
+  {art:'ТБ-2198',name:'Труба бесшовная 219×8 мм',svg:svgs.pipe_round(219,8,colors.pipe_bs),badge:'hit',stock:'yes',stockTxt:'На складе: 288 м',specs:[['Стандарт','ГОСТ 8731'],['Сталь','09Г2С'],['Длина','8–12 м'],['Вес п.м.','41,6 кг'],['Min. партия','8 м']],price:'8 960',unit:'м',old:null},
+  {art:'АР-А500',name:'Арматура рифлёная А500С ∅12 мм',svg:svgs.rebar(12,colors.rebar),badge:'hit',stock:'yes',stockTxt:'На складе: 12 т',specs:[['Класс','А500С'],['Длина','11,7 м'],['Вес п.м.','0,888 кг'],['Min. партия','1 т']],price:'590',unit:'кг',old:null},
+  {art:'УГ-5050',name:'Уголок стальной 50×50×5 мм',svg:svgs.angle(50,colors.angle),badge:null,stock:'yes',stockTxt:'На складе: 8 т',specs:[['Стандарт','ГОСТ 8509'],['Сталь','Ст3сп'],['Длина','6–12 м'],['Вес п.м.','3,77 кг'],['Min. партия','1 т']],price:'620',unit:'кг',old:'690'},
+  {art:'ШВ-120',name:'Швеллер №12 горячекатаный',svg:svgs.channel(120,colors.channel),badge:null,stock:'low',stockTxt:'Осталось: 4 т',specs:[['Стандарт','ГОСТ 8240'],['Сталь','Ст3сп'],['Длина','11,7 м'],['Вес п.м.','10,4 кг'],['Min. партия','500 кг']],price:'680',unit:'кг',old:null},
+  {art:'ЛС-14',name:'Лист стальной горячекатаный 14 мм',svg:svgs.sheet(14,colors.sheet),badge:'new',stock:'yes',stockTxt:'На складе: 18 т',specs:[['Стандарт','ГОСТ 19903'],['Сталь','09Г2С'],['Размер','1500×6000 мм'],['Вес листа','988 кг'],['Min. партия','1 лист']],price:'650',unit:'кг',old:null},
+];
+
+const badgeLabels={hit:'Хит',new:'Новинка',sale:'Скидка'};
+const grid=document.getElementById('prod-grid');
+products.forEach(p=>{
+  const badge=p.badge?`<span class="prod-badge ${p.badge}">${badgeLabels[p.badge]}</span>`:'';
+  const oldPrice=p.old?`<span class="prod-price-old">${p.old} ₸</span>`:'';
+  const specs=p.specs.map(s=>`<div class="prod-spec"><span class="prod-spec-k">${s[0]}</span><span class="prod-spec-v">${s[1]}</span></div>`).join('');
+  grid.innerHTML+=`<div class="prod">
+    <div class="prod-img">${p.svg}${badge}<button class="prod-fav">♡</button></div>
+    <div class="prod-body">
+      <div class="prod-art">${p.art}</div>
+      <div class="prod-stock ${p.stock}">${p.stockTxt}</div>
+      <div class="prod-name">${p.name}</div>
+      <div class="prod-specs">${specs}</div>
+      <div class="prod-footer">
+        <div class="prod-price-wrap">
+          <span class="prod-price">${p.price} ₸<span class="prod-price-sub">/${p.unit} ${p.old?oldPrice:''}</span></span>
+        </div>
+        <button class="btn-req">Запросить</button>
+      </div>
+    </div>
+  </div>`;
+});
+
+// Категории
+const cats=[
+  {icon:'⚡',label:'Кабельная продукция',cnt:248,subs:['Силовые кабели ВВГ, ВБбШв (82)','Контрольные кабели (48)','Кабели связи (34)','Бронированные кабели (52)','Провода и шнуры (32)']},
+  {icon:'🔩',label:'Металлопрокат',cnt:184,subs:['Арматура (56)','Уголок стальной (38)','Швеллер (29)','Двутавр (24)','Лист стальной (37)']},
+  {icon:'🔧',label:'Трубный прокат',cnt:312,subs:['Труба бесшовная (84)','Труба эл/сварная (128)','Труба профильная (67)','Труба нержавеющая (33)'],active:true},
+  {icon:'⚙️',label:'Трубопроводная арматура',cnt:156,subs:['Задвижки (48)','Краны шаровые (62)','Фланцы и отводы (46)']},
+  {icon:'🏗',label:'Металлоконструкции',cnt:96,subs:['Балки двутавровые (32)','Колонны (28)','Фермы (36)']},
+  {icon:'🔌',label:'Электрооборудование',cnt:203,subs:['Автоматические выключатели (78)','Щиты и шкафы (64)','Трансформаторы (61)']},
+  {icon:'📦',label:'Крепёж и метизы',cnt:520,subs:['Болты и гайки (218)','Шпильки (134)','Анкера (168)']},
+  {icon:'🛡',label:'Защитные покрытия',cnt:88,subs:['Антикоррозийные (54)','Огнезащитные (34)']},
+];
+
+const csb=document.getElementById('cat-sidebar');
+csb.innerHTML='<div class="csb-head"><div class="csb-title">Категории</div></div>';
+cats.forEach((c,i)=>{
+  const subs=c.subs.map(s=>`<div class="csb-sub">${s}</div>`).join('');
+  csb.innerHTML+=`<div class="csb-cat"><div class="csb-main${c.active?' active open':''}" onclick="toggleCat(this,${i})">
+    <span class="csb-ico">${c.icon}</span><span class="csb-name">${c.label}</span>
+    <span class="csb-cnt">${c.cnt}</span><span class="csb-arr">›</span>
+  </div><div class="csb-subs${c.active?' open':''}" id="csb${i}">${subs}</div></div>`;
+});
+function toggleCat(el,i){
+  const was=el.classList.contains('open');
+  document.querySelectorAll('.csb-main').forEach(x=>{x.classList.remove('open','active')});
+  document.querySelectorAll('.csb-subs').forEach(x=>x.classList.remove('open'));
+  if(!was){el.classList.add('open','active');document.getElementById('csb'+i).classList.add('open')}
+}
+
+const msbCats=document.getElementById('msb-cats');
+cats.forEach((c,i)=>{
+  const subs=c.subs.map(s=>`<div class="mssub">${s}</div>`).join('');
+  msbCats.innerHTML+=`<div class="msi"><div class="msr${c.active?' active':''}" onclick="toggleMs(this,${i})">
+    <div class="msico">${c.icon}</div><div class="mslbl">${c.label}</div><span class="msarr">›</span>
+  </div><div class="mssubs${c.active?' open':''}" id="ms${i}">${subs}</div></div>`;
+});
+function toggleMs(row,i){
+  const s=document.getElementById('ms'+i);const open=s.classList.contains('open');
+  document.querySelectorAll('.mssubs').forEach(x=>x.classList.remove('open'));
+  document.querySelectorAll('.msr').forEach(x=>x.classList.remove('open','active'));
+  if(!open){s.classList.add('open');row.classList.add('open','active')}
+}
+
+let sbOpen=false;
+function toggleSb(){sbOpen?closeSb():openSb()}
+function openSb(){sbOpen=true;document.getElementById('msidebar').classList.add('open');document.getElementById('ov').classList.add('show');document.getElementById('ct').classList.add('open');document.getElementById('ct-lbl').textContent='Закрыть'}
+function closeSb(){sbOpen=false;document.getElementById('msidebar').classList.remove('open');document.getElementById('ov').classList.remove('show');document.getElementById('ct').classList.remove('open');document.getElementById('ct-lbl').textContent='Каталог'}
+
+document.querySelectorAll('.sc').forEach(sc=>{
+  sc.addEventListener('click',()=>{document.querySelectorAll('.sc').forEach(x=>x.classList.remove('active'));sc.classList.add('active')});
+});
+</script>
+</body>
+</html>
